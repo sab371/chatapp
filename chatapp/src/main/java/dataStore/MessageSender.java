@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONObject;
+
 import com.adventnet.persistence.DataAccess;
 import com.adventnet.persistence.DataAccessException;
 import com.adventnet.persistence.DataObject;
@@ -17,35 +19,39 @@ import com.adventnet.persistence.Row;
 import com.adventnet.persistence.WritableDataObject;
 
 public class MessageSender extends HttpServlet {
-	public void service(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-		PrintWriter out = res.getWriter();
-		HttpSession session = req.getSession();
-		String msg = (String)req.getParameter("message");
+	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		
+		PrintWriter out = response.getWriter();
+		HttpSession session = request.getSession();
+		JSONObject json = new JSONObject();
+		
+		String msg = (String)request.getParameter("message");
 		String to = (String) session.getAttribute("to");
 		String from = (String)session.getAttribute("username");
 		
-		Row r = new Row ("MessageStore");
-		r.set("FROM", from);
-		r.set("TO", to);
-		r.set("MESSAGE", msg);
-		Date d = new Date();
-		Long time = d.getTime();
+		Row row = new Row ("MessageStore");
+		row.set("FROM", from);
+		row.set("TO", to);
+		row.set("MESSAGE_TYPE", "text");
+		row.set("MESSAGE_TEXT", msg);
+		
+		Date date = new Date();
+		Long time = date.getTime();
+		
         Timestamp ts = new Timestamp(time);
-        r.set("TIME", ts);
-        DataObject d1=new WritableDataObject();
+        row.set("TIME", ts);
+        
+        DataObject dobj=new WritableDataObject();
+        
 		try {
-			d1.addRow(r);
-		} catch (DataAccessException e1) {
-			// TODO Auto-generated catch block
+			dobj.addRow(row);
+			DataAccess.add(dobj);
+			json.put("status", 1);
+		} 
+		catch (DataAccessException e1) {
 			e1.printStackTrace();
+			json.put("status", 0);
 		}
-
-		try {
-			DataAccess.add(d1);
-			out.write("success");
-		} catch (DataAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		out.write(json.toString());
 	}
 }

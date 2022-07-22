@@ -10,39 +10,47 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONObject;
+
 import com.google.gson.Gson;
 
 import dataStore.DataCheck;
+import dataStore.UserDataHandler;
 
 public class AuthServlet extends HttpServlet{
-	public void doPost(HttpServletRequest req, HttpServletResponse res ) throws IOException, ServletException {
-		String usrname = req.getParameter("username");
-		String password = req.getParameter("password");
-		PrintWriter out = res.getWriter();
-		DataCheck dc = new DataCheck();
-		Gson gson = new Gson();
-		res.setContentType("text/plain");
-//		res.setContentType("application/json");
-		res.setCharacterEncoding("UTF-8");
+	public void doGet(HttpServletRequest request, HttpServletResponse response ) throws IOException, ServletException {
+		
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		
+		PrintWriter out = response.getWriter();
+		DataCheck dc = DataCheck.getInstance();
+		UserDataHandler data = UserDataHandler.getInstance(); 
+		JSONObject json = new JSONObject();
+		
+		response.setContentType("text/plain");
+		response.setCharacterEncoding("UTF-8");
+		
 		try {
-			String str ;
-			if(dc.check(usrname,password)) {
-				HttpSession session = req.getSession();
-				session.setAttribute("username", usrname);
-				session.setAttribute("password", password);
-				session.setMaxInactiveInterval(5*60);
-				str="valid";
-//				str = gson.toJson("valid");
+			char status ;
+			if(dc.check(username,password)) {
+				
+				HttpSession session = request.getSession();
+				session.setAttribute("username", username);
+				session.setAttribute("UserId", data.getId(username));
+				
+				json.put("status", 1);
 			}
 			else {
-				str = "invalid";
-//				str = gson.toJson("invalid");
-				//out.close();
+				
+				json.put("status", 0);
 			}
-			res.getWriter().write(str);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			response.getWriter().write(json.toString());
+		} 
+		catch (IOException e) {
+			
 			e.printStackTrace();
+			json.put("status", 0);
 		}
 	}
 }

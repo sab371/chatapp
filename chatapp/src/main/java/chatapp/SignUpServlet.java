@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONObject;
+
 import com.adventnet.ds.query.Column;
 import com.adventnet.ds.query.Criteria;
 import com.adventnet.ds.query.QueryConstants;
@@ -19,57 +21,27 @@ import com.adventnet.persistence.DataObject;
 import com.adventnet.persistence.Row;
 import com.adventnet.persistence.WritableDataObject;
 
-public class SignUpServlet extends HttpServlet {
-	public void doPost(HttpServletRequest req, HttpServletResponse res ) throws IOException, ServletException{
-		
-		PrintWriter out = res.getWriter();
-		String usrname = req.getParameter("username");
-		Criteria c = new Criteria(new Column("UserAuthentication", "USER_NAME"),usrname, QueryConstants.EQUAL);
-		DataObject d = null;
-		try {
-			d = DataAccess.get("UserAuthentication",c);
-		} catch (DataAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		Iterator it = null;
-		try {
-			it = d.getRows("UserAuthentication");
-		} catch (DataAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+import dataStore.UserDataHandler;
 
-		if(it.hasNext())
-		{
-			res.getWriter().write("invalid");
+public class SignUpServlet extends HttpServlet {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+
+		PrintWriter out = response.getWriter();
+		JSONObject json = new JSONObject();
+		UserDataHandler userData = UserDataHandler.getInstance();
+		
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		
+		boolean isUserExist = userData.setUserData(username, password);
+		
+		if(isUserExist) {
+			json.put("status", 0);
 		}
 		else {
-			String password = req.getParameter("password");
-			
-			
-			Row r = new Row ("UserAuthentication");
-			r.set("USER_NAME", usrname);
-			r.set("PASSWORD", password);
-
-			
-			DataObject d1=new WritableDataObject();
-			try {
-				d1.addRow(r);
-			} catch (DataAccessException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-
-			try {
-				DataAccess.add(d1);
-			} catch (DataAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			res.getWriter().write("valid");
+			json.put("status", 1);
 		}
-		
-	}	
+		out.write(json.toString());
+
+	}
 }

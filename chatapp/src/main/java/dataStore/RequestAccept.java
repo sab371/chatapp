@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONObject;
+
 import com.adventnet.ds.query.Column;
 import com.adventnet.ds.query.Criteria;
 import com.adventnet.ds.query.QueryConstants;
@@ -21,39 +23,46 @@ import com.adventnet.persistence.Row;
 import com.adventnet.persistence.WritableDataObject;
 
 public class RequestAccept extends HttpServlet {
-	public void service(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-		HttpSession session = req.getSession();
-		String name = (String)session.getAttribute("username");
-		String path = req.getRequestURI();
+	public void service(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+
+		HttpSession session = request.getSession();
+		String name = (String) session.getAttribute("username");
+		String path = request.getRequestURI();
 		String segments[] = path.split("/");
-		String frndname = segments[segments.length-1];
-		Criteria c = (new Criteria(Column.getColumn("FriendsList", "USER_NAME"), frndname, QueryConstants.EQUAL)).and(new Criteria(Column.getColumn("FriendsList", "FRIEND"), name, QueryConstants.EQUAL)); 		
-		
-		UpdateQuery uq = new UpdateQueryImpl("FriendsList");
-		uq.setUpdateColumn("STATUS","Accepted");
-		
-		uq.setCriteria(c);
-		Row r = new Row ("FriendsList");
-		r.set("USER_NAME", name);
-		r.set("FRIEND", frndname);
-		r.set("STATUS", "Accepted");
-		DataObject d1=new WritableDataObject();
-		try {
-			DataAccess.update(uq);
-			d1.addRow(r);
-			
-		} catch (DataAccessException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		String frndname = segments[segments.length - 1];
+		JSONObject json = new JSONObject();
+		UserDataHandler dataHandler = UserDataHandler.getInstance();
+		long id = dataHandler.getId(name);
 
 		try {
-			DataAccess.add(d1);
-		} catch (DataAccessException e) {
-			// TODO Auto-generated catch block
+			Criteria criteria = (new Criteria(Column.getColumn("FriendsList", "USER_NAME"), frndname, QueryConstants.EQUAL))
+					.and(new Criteria(Column.getColumn("FriendsList", "FRIEND"), name, QueryConstants.EQUAL));
+
+			UpdateQuery updatequery = new UpdateQueryImpl("FriendsList");
+			updatequery.setUpdateColumn("STATUS", "Accepted");
+			updatequery.setCriteria(criteria);
+
+			Row row = new Row("FriendsList");
+			row.set("USER_ID", id);
+			row.set("USER_NAME", name);
+			row.set("FRIEND", frndname);
+			row.set("STATUS", "Accepted");
+
+			DataObject dobj = new WritableDataObject();
+
+			DataAccess.update(updatequery);
+			dobj.addRow(row);
+			DataAccess.add(dobj);
+			json.put("status", 1);
+
+		} 
+		catch (DataAccessException e) {
 			e.printStackTrace();
+			json.put("status", 0);
 		}
-		PrintWriter out = res.getWriter();
-		out.write("Request Accepted");
+		
+		PrintWriter out = response.getWriter();
+		out.write(json.toString());
 	}
 }

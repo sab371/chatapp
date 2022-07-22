@@ -27,80 +27,32 @@ import com.adventnet.persistence.DataObject;
 import com.adventnet.persistence.Row;
 import com.google.gson.Gson;
 
+import dataStore.DisplayList;
+import dataStore.UserListFormatter;
+
 public class PeopleServlet extends HttpServlet {
-	public void service(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-		HttpSession session = req.getSession();
-		PrintWriter out = res.getWriter();
+		HttpSession session = request.getSession();
+		PrintWriter out = response.getWriter();
+		DisplayList displayList = DisplayList.getInstance(); 
+		Gson gson = new Gson();
+		
 		String name = (String) session.getAttribute("username");
-
-		if (name == null) {
-			out.write("time out");
+		
+		
+		try {
+			ArrayList<UserListFormatter> userList = displayList.getUserList(name);
+			response.setContentType("application/json");
+			
+			out.write(gson.toJson(userList));
+			
+		} catch (DataAccessException e) {
+			
+			e.printStackTrace();
+			
 		}
-
-		else {
-			try {
-				SelectQuery q = new SelectQueryImpl(Table.getTable("UserAuthentication"));
-				q.addSelectColumn(Column.getColumn("UserAuthentication", "*"));
-				q.setCriteria(
-						new Criteria(new Column("UserAuthentication", "USER_NAME"), name, QueryConstants.NOT_EQUAL));
-
-				DataObject dob1;
-				dob1 = DataAccess.get(q);
-				Iterator i = dob1.getRows("UserAuthentication");
-//				Map<String,Object> users = new HashMap<>();
-				Gson gson = new Gson();
-				String user = null;
-				int k=0;
-				ArrayList<Users> list=new ArrayList<Users>();
-				while (i.hasNext()) {
-					Row r = (Row) i.next();
-					user = r.getString(2);
-					SelectQuery q2 = new SelectQueryImpl(Table.getTable("FriendsList"));
-					q2.addSelectColumn(Column.getColumn("FriendsList", "*"));
-					q2.setCriteria(new Criteria(new Column("FriendsList", "USER_NAME"), name, QueryConstants.EQUAL)
-							.and(new Criteria(new Column("FriendsList", "FRIEND"), user, QueryConstants.EQUAL)));
-					DataObject dob3 = DataAccess.get(q2);
-					Iterator i1 = dob3.getRows("FriendsList");
-					Users obj;
-					if (!(i1.hasNext())) {
-						k++;
-						obj = new Users(k, user,"user");
-						list.add(obj);
-//					out.println(" "+"<a href=\"welcome/sendrequest/"+user+"\">send friend request</a>"+"<a href=\"chat/"+user+"\">chat</a><br>");
-					}
-					while (i1.hasNext()) {
-						Row r1 = (Row) i1.next();
-//						out.write(gson.toJson(r1));
-						String status = r1.getString("STATUS");
-						if (status.equals("Accepted")) {
-							k++;
-							obj = new Users(k, user,"frienda");
-							list.add(obj);
-//					out.println("<a href=\"chat/"+user+"\">chat</a><br>");
-						} else if (status.equals("Requested")) {
-							k++;
-							obj = new Users(k, user,"friendr");
-							list.add(obj);
-//					out.println("Request sent<a href=\"chat/"+user+"\">chat</a><br>");
-						}
-
-					}
-					
-				}
-				out.write(gson.toJson(list));
-			} catch (DataAccessException e) {
-				e.printStackTrace();
-			}
-		}
+			
 	}
+
 }
-class Users {    
-int id;    
-String name,type;    
-public Users(int id, String name, String type) {    
-    this.id = id;    
-    this.name = name;    
-    this.type = type;    
-}    
-} 

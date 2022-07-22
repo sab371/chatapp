@@ -2,6 +2,7 @@ package dataStore;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -9,6 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONObject;
+
+import com.adventnet.ds.query.Column;
+import com.adventnet.ds.query.Criteria;
+import com.adventnet.ds.query.QueryConstants;
 import com.adventnet.persistence.DataAccess;
 import com.adventnet.persistence.DataAccessException;
 import com.adventnet.persistence.DataObject;
@@ -16,33 +22,40 @@ import com.adventnet.persistence.Row;
 import com.adventnet.persistence.WritableDataObject;
 
 public class RequestSender extends HttpServlet {
-	public void service(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-		HttpSession session = req.getSession();
-		String name = (String)session.getAttribute("username");
-		String path = req.getRequestURI();
+	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+
+		HttpSession session = request.getSession();
+		String name = (String) session.getAttribute("username");
+		String path = request.getRequestURI();
 		String segments[] = path.split("/");
-		String frndname = segments[segments.length-1];
-		
-		Row r = new Row ("FriendsList");
-		r.set("USER_NAME", name);
-		r.set("FRIEND", frndname);
-		r.set("STATUS", "Requested");
-		DataObject d1=new WritableDataObject();
-		try {
-			d1.addRow(r);
-		} catch (DataAccessException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		String frndname = segments[segments.length - 1];
+		JSONObject json = new JSONObject();
+		UserDataHandler dataHandler = UserDataHandler.getInstance();
+		long id = dataHandler.getId(name);
+
+		DataCheck dataCheck = DataCheck.getInstance();
 
 		try {
-			DataAccess.add(d1);
+
+			Row row = new Row("FriendsList");
+			row.set("USER_ID", id);
+			row.set("USER_NAME", name);
+			row.set("FRIEND", frndname);
+			row.set("STATUS", "Requested");
+
+			DataObject dobj = new WritableDataObject();
+			dobj.addRow(row);
+			DataAccess.add(dobj);
+			json.put("status", 1);
+
 		} catch (DataAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			json.put("status", 0);
 		}
-		PrintWriter out = res.getWriter();
-		out.write(frndname);
-		out.write("Request Sent");
+
+		PrintWriter out = response.getWriter();
+		out.write(json.toString());
+
 	}
+
 }
