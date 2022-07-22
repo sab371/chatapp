@@ -108,6 +108,150 @@ define("chat-app/tests/integration/components/chat-sender-test", ["qunit", "embe
     });
   });
 });
+define("chat-app/tests/integration/components/deny-request-test", ["qunit", "ember-qunit", "@ember/test-helpers"], function (_qunit, _emberQunit, _testHelpers) {
+  "use strict";
+
+  (0, _qunit.module)('Integration | Component | deny-request', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _qunit.test)('it renders', async function (assert) {
+      // Set any properties with this.set('myProperty', 'value');
+      // Handle any actions with this.set('myAction', function(val) { ... });
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        <DenyRequest />
+      */
+      {
+        "id": "s4Cdwm94",
+        "block": "{\"symbols\":[],\"statements\":[[8,\"deny-request\",[],[[],[]],null]],\"hasEval\":false,\"upvars\":[]}",
+        "meta": {}
+      }));
+      assert.equal(this.element.textContent.trim(), ''); // Template block usage:
+
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        
+            <DenyRequest>
+              template block text
+            </DenyRequest>
+          
+      */
+      {
+        "id": "Dk4H5MK+",
+        "block": "{\"symbols\":[],\"statements\":[[2,\"\\n      \"],[8,\"deny-request\",[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n        template block text\\n      \"]],\"parameters\":[]}]]],[2,\"\\n    \"]],\"hasEval\":false,\"upvars\":[]}",
+        "meta": {}
+      }));
+      assert.equal(this.element.textContent.trim(), 'template block text');
+    });
+  });
+});
+define("chat-app/tests/integration/components/file-preview-test", ["qunit", "ember-qunit", "@ember/test-helpers"], function (_qunit, _emberQunit, _testHelpers) {
+  "use strict";
+
+  (0, _qunit.module)('Integration | Component | file-preview', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _qunit.test)('it renders', async function (assert) {
+      // Set any properties with this.set('myProperty', 'value');
+      // Handle any actions with this.set('myAction', function(val) { ... });
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        <FilePreview />
+      */
+      {
+        "id": "HGGit0cE",
+        "block": "{\"symbols\":[],\"statements\":[[8,\"file-preview\",[],[[],[]],null]],\"hasEval\":false,\"upvars\":[]}",
+        "meta": {}
+      }));
+      assert.equal(this.element.textContent.trim(), ''); // Template block usage:
+
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        
+            <FilePreview>
+              template block text
+            </FilePreview>
+          
+      */
+      {
+        "id": "LMCs/PpV",
+        "block": "{\"symbols\":[],\"statements\":[[2,\"\\n      \"],[8,\"file-preview\",[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n        template block text\\n      \"]],\"parameters\":[]}]]],[2,\"\\n    \"]],\"hasEval\":false,\"upvars\":[]}",
+        "meta": {}
+      }));
+      assert.equal(this.element.textContent.trim(), 'template block text');
+    });
+  });
+});
+define("chat-app/tests/integration/components/image-preview-test", ["qunit", "ember-qunit", "@ember/test-helpers"], function (_qunit, _emberQunit, _testHelpers) {
+  "use strict";
+
+  (0, _qunit.module)('Integration | Component | image-preview', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _qunit.test)('it renders', async function (assert) {
+      // Set any properties with this.set('myProperty', 'value');
+      // Handle any actions with this.set('myAction', function(val) { ... });
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        <ImagePreview />
+      */
+      {
+        "id": "HZBf8R9L",
+        "block": "{\"symbols\":[],\"statements\":[[8,\"image-preview\",[],[[],[]],null]],\"hasEval\":false,\"upvars\":[]}",
+        "meta": {}
+      }));
+      assert.equal(this.element.textContent.trim(), ''); // Template block usage:
+
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        
+            <ImagePreview>
+              template block text
+            </ImagePreview>
+          
+      */
+      {
+        "id": "QwtEPYkp",
+        "block": "{\"symbols\":[],\"statements\":[[2,\"\\n      \"],[8,\"image-preview\",[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n        template block text\\n      \"]],\"parameters\":[]}]]],[2,\"\\n    \"]],\"hasEval\":false,\"upvars\":[]}",
+        "meta": {}
+      }));
+      assert.equal(this.element.textContent.trim(), 'template block text');
+    });
+  });
+});
+define("chat-app/tests/integration/components/logout-test", ["qunit", "ember-qunit", "@ember/test-helpers"], function (_qunit, _emberQunit, _testHelpers) {
+  "use strict";
+
+  (0, _qunit.module)('Integration | Component | logout', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _qunit.test)('it renders', async function (assert) {
+      // Set any properties with this.set('myProperty', 'value');
+      // Handle any actions with this.set('myAction', function(val) { ... });
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        <Logout />
+      */
+      {
+        "id": "01TOUYgz",
+        "block": "{\"symbols\":[],\"statements\":[[8,\"logout\",[],[[],[]],null]],\"hasEval\":false,\"upvars\":[]}",
+        "meta": {}
+      }));
+      assert.equal(this.element.textContent.trim(), ''); // Template block usage:
+
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        
+            <Logout>
+              template block text
+            </Logout>
+          
+      */
+      {
+        "id": "kKR2ZMM8",
+        "block": "{\"symbols\":[],\"statements\":[[2,\"\\n      \"],[8,\"logout\",[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n        template block text\\n      \"]],\"parameters\":[]}]]],[2,\"\\n    \"]],\"hasEval\":false,\"upvars\":[]}",
+        "meta": {}
+      }));
+      assert.equal(this.element.textContent.trim(), 'template block text');
+    });
+  });
+});
 define("chat-app/tests/integration/components/nav-bar-test", ["qunit", "ember-qunit", "@ember/test-helpers"], function (_qunit, _emberQunit, _testHelpers) {
   "use strict";
 
@@ -138,6 +282,42 @@ define("chat-app/tests/integration/components/nav-bar-test", ["qunit", "ember-qu
       {
         "id": "wDo+6X4w",
         "block": "{\"symbols\":[],\"statements\":[[2,\"\\n      \"],[8,\"nav-bar\",[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n        template block text\\n      \"]],\"parameters\":[]}]]],[2,\"\\n    \"]],\"hasEval\":false,\"upvars\":[]}",
+        "meta": {}
+      }));
+      assert.equal(this.element.textContent.trim(), 'template block text');
+    });
+  });
+});
+define("chat-app/tests/integration/components/send-image-test", ["qunit", "ember-qunit", "@ember/test-helpers"], function (_qunit, _emberQunit, _testHelpers) {
+  "use strict";
+
+  (0, _qunit.module)('Integration | Component | send-image', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _qunit.test)('it renders', async function (assert) {
+      // Set any properties with this.set('myProperty', 'value');
+      // Handle any actions with this.set('myAction', function(val) { ... });
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        <SendImage />
+      */
+      {
+        "id": "lywproOi",
+        "block": "{\"symbols\":[],\"statements\":[[8,\"send-image\",[],[[],[]],null]],\"hasEval\":false,\"upvars\":[]}",
+        "meta": {}
+      }));
+      assert.equal(this.element.textContent.trim(), ''); // Template block usage:
+
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        
+            <SendImage>
+              template block text
+            </SendImage>
+          
+      */
+      {
+        "id": "mkyWYusA",
+        "block": "{\"symbols\":[],\"statements\":[[2,\"\\n      \"],[8,\"send-image\",[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n        template block text\\n      \"]],\"parameters\":[]}]]],[2,\"\\n    \"]],\"hasEval\":false,\"upvars\":[]}",
         "meta": {}
       }));
       assert.equal(this.element.textContent.trim(), 'template block text');
@@ -344,6 +524,17 @@ define("chat-app/tests/unit/routes/signup-test", ["qunit", "ember-qunit"], funct
     (0, _emberQunit.setupTest)(hooks);
     (0, _qunit.test)('it exists', function (assert) {
       let route = this.owner.lookup('route:signup');
+      assert.ok(route);
+    });
+  });
+});
+define("chat-app/tests/unit/routes/socket-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Route | socket', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks);
+    (0, _qunit.test)('it exists', function (assert) {
+      let route = this.owner.lookup('route:socket');
       assert.ok(route);
     });
   });
